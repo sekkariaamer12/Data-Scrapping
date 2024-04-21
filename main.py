@@ -3,6 +3,7 @@ from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 from openai import OpenAI
 import json
+from kafka import KafkaProducer
 
 SBR_WS_CDP = 'wss://brd-customer-hl_ac20983b-zone-real_eastat_browser:p7uv889zr7qa@brd.superproxy.io:9222'
 BASE_URL = "https://www.zoopla.co.uk/"
@@ -66,7 +67,7 @@ def extract_plan(soup):
         plan["floor_plan"] = floor_plan_src.split(' ')[0]
     return plan
 
-async def run(pw):
+async def run(pw,producer):
     print('Connecting to Scraping Browser...')
     browser = await pw.chromium.connect_over_cdp(SBR_WS_CDP)
     try:
@@ -113,17 +114,21 @@ async def run(pw):
             floor_plan = extract_plan(soup)
             data.update(floor_plan)
             #data.update(property_details)
-            print(data)
-            break
-        print('Navigated! Scraping page content...')
+            print('send data to kafka')
+            producer.send("properties", value= json.dumps(data).encode('utf-8'))
+            print('data sent to kafka')
+
+
+           # break
        # html = await page.content()
        # print(html)
     finally:
         await browser.close()
 
 async def main():
+    producer= KafkaProducer(bootstrap_servers=["localhost:9092"], max_block_ms=5000)
     async with async_playwright() as playwright:
-        await run(playwright)
+        await run(playwright,producer)
 
 if __name__ == '__main__':
     asyncio.run(main())
