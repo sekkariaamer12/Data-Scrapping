@@ -67,7 +67,7 @@ def extract_plan(soup):
         plan["floor_plan"] = floor_plan_src.split(' ')[0]
     return plan
 
-async def run(pw,producer):
+async def run(pw,producer): #
     print('Connecting to Scraping Browser...')
     browser = await pw.chromium.connect_over_cdp(SBR_WS_CDP)
     try:
@@ -110,16 +110,16 @@ async def run(pw,producer):
             data['pictures'] = pictures
 
             property_details = soup.select_one('div[class="_14bi3x33z _14bi3x32f"]')
-            #property_details = extract_details(property_details)
+            property_details = extract_details(property_details)
             floor_plan = extract_plan(soup)
             data.update(floor_plan)
-            #data.update(property_details)
+            data.update(property_details)
+            print(data)
             print('send data to kafka')
             producer.send("properties", value= json.dumps(data).encode('utf-8'))
             print('data sent to kafka')
-
-
-           # break
+            #await asyncio.sleep(90)
+            break
        # html = await page.content()
        # print(html)
     finally:
@@ -128,7 +128,7 @@ async def run(pw,producer):
 async def main():
     producer= KafkaProducer(bootstrap_servers=["localhost:9092"], max_block_ms=5000)
     async with async_playwright() as playwright:
-        await run(playwright,producer)
+        await run(playwright,producer) #
 
 if __name__ == '__main__':
     asyncio.run(main())
