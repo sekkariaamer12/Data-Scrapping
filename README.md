@@ -12,7 +12,6 @@ Ce projet consiste à extraire des données immobilières à partir d'un site we
 ## Fonctionnalités
 
 - **Extraction de données** : Le script extrait les détails des propriétés immobilières, y compris les adresses, les prix, le nombre de chambres, les images, les plans d'étage, etc.
-- **Traitement des données** : Les données extraites sont nettoyées et structurées avant d'être envoyées à un système de stockage ou d'analyse.
 - **Utilisation de l'IA** : Le script utilise l'API de OpenAI pour générer des descriptions détaillées des propriétés à partir des données brutes.
 - **Streaming de données** : Les données extraites sont envoyées en continu à un broker Kafka pour être consommées par d'autres systèmes.
 
