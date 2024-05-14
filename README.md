@@ -7,7 +7,7 @@ Ce projet consiste à extraire des données immobilières à partir d'un site we
 - **BeautifulSoup**
 - **OpenAI**
 - **Kafka**
-- **Bright Data (pour l'accès au service de scraping web)**
+- **Bright Data (Bright Data propose une solution complète pour le scraping à grande échelle, en offrant des fonctionnalités avancées pour permettre aux entreprises d'extraire des données à partir du Web de manière efficace, éthique et conforme à la législation.)**
 
 ## Fonctionnalités
 
